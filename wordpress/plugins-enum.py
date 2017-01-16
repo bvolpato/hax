@@ -20,29 +20,32 @@ def getPlugins(url):
     cards = res.css("div.plugin-card")
     
     for card in cards:
-        
-        link = card.css("h4 a").xpath("@href").extract()[0]
-
-        linkRes = urlopen(link)
-        
-        pluginRes = HtmlResponse(url, body=linkRes.read())
-        
-        pluginName = pluginRes.css("h2[itemprop='name']").xpath("text()").extract()[0]
-        downloadLink = pluginRes.css("a[itemprop='downloadUrl']").xpath("@href").extract()[0]
-        
-        fileName = downloadLink[downloadLink.rindex("/")+1:];
-        filePath = "/tmp/" + fileName
-        urllib.urlretrieve (downloadLink, filePath)
-        
-        zipFile = zipfile.ZipFile(filePath)
-        
-        files = zipFile.namelist()
-        
-        #phpFiles = filter(lambda pluginFile: "php" in pluginFile, files)
-        
-        plugins[pluginName] = files;
-        print "Analyzed", pluginName, "-", fileName
-
+        try:
+            
+            link = card.css("h4 a").xpath("@href").extract()[0]
+    
+            linkRes = urlopen(link)
+            
+            pluginRes = HtmlResponse(url, body=linkRes.read())
+            
+            pluginName = pluginRes.css("h2[itemprop='name']").xpath("text()").extract()[0]
+            downloadLink = pluginRes.css("a[itemprop='downloadUrl']").xpath("@href").extract()[0]
+            
+            fileName = downloadLink[downloadLink.rindex("/")+1:];
+            filePath = "/tmp/" + fileName
+            urllib.urlretrieve (downloadLink, filePath)
+            
+            zipFile = zipfile.ZipFile(filePath)
+            
+            files = zipFile.namelist()
+            
+            #phpFiles = filter(lambda pluginFile: "php" in pluginFile, files)
+            
+            plugins[pluginName] = files;
+            print "Analyzed", pluginName, "-", fileName
+            
+        except Exception as e:
+            print e
   
   
 for i in range(1, 30):
