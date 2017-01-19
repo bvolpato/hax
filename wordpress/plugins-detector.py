@@ -27,7 +27,7 @@ for plugin in plugins:
         
         print "[+] Worked", plugin, urlCheck
     except urllib2.HTTPError, e:
-        print "[-] Failed", plugin, urlCheck, e.code
-        
+        #print "[-] Failed", plugin, urlCheck, e.code
+        pass
 
 print "Done!"
